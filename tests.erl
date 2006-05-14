@@ -3,14 +3,7 @@
 
 -include("eunit.hrl").
 
--export([start/0]).
--export([test_dec_int1/0, test_dec_int2/0, test_dec_int3/0, test_dec_int4/0, 
-	 test_dec_string1/0, test_dec_string2/0, 
-	 test_dec_list1/0, test_dec_list2/0, test_dec_list3/0, test_dec_list4/0, test_dec_list5/0, 
-	 test_dec_dict1/0]).
--export([test_enc_int1/0, test_enc_int2/0, 
-	 test_enc_string1/0, test_enc_string2/0,
-	 test_enc_list1/0, test_enc_list2/0, test_enc_list3/0]).
+-compile(export_all).
 
 %% Integer decoding tests
 test_enc_int1() ->
