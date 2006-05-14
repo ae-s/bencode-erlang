@@ -1,9 +1,16 @@
 
 -module(bencode).
 
--export([bdecode/1]).
+-export([bdecode/1, bencode/1]).
 
 -import(string, [substr/2, substr/3, to_integer/1, chr/2]).
+
+%% %% %% %% %% %% %% %% Decoding %% %% %% %% %% %% %% %%
+
+bencode(Val) when is_integer(Val) ->
+    "i" ++ integer_to_list(Val) ++ "e".
+
+%% %% %% %% %% %% %% %% Decoding %% %% %% %% %% %% %% %%
 
 %% String
 bdecode([Char | _Rest] = Str) when Char >= $0, Char =< $9 ->
@@ -22,34 +29,33 @@ bdecode([Char | Rest]) when Char == $i ->
 
 %% List
 bdecode([Char | Rest]) when Char == $l ->
-    {List, Rem} = dolist(Rest),
+    {List, Rem} = declist(Rest),
     {{list, List}, Rem};
 
 %% Dict
 bdecode([Char | Rest]) when Char == $d ->
-    {Dict, Rem} = dodict(Rest),
+    {Dict, Rem} = decdict(Rest),
     {{dict, Dict}, Rem}.
 
 
-dolist(Str) ->
-    dolist(Str, []).
+declist(Str) ->
+    declist(Str, []).
 
-dolist([Char | Rest], List) when Char == $e ->
+declist([Char | Rest], List) when Char == $e ->
     {List, Rest};
 
-dolist(Str, List) ->
+declist(Str, List) ->
     {Result, Rest} = bdecode(Str),
-    dolist(Rest, lists:append(List, [Result])).
+    declist(Rest, lists:append(List, [Result])).
 
 
-dodict(Str) ->
-    dodict(Str, dict:new()).
+decdict(Str) ->
+    decdict(Str, dict:new()).
 
-dodict([Char | Rest], Dict) when Char == $e ->
+decdict([Char | Rest], Dict) when Char == $e ->
     {Dict, Rest};
 
-dodict(Str, Dict) ->
+decdict(Str, Dict) ->
     {{string, Key}, Rest} = bdecode(Str),
     {Val, Rest2} = bdecode(Rest),
-    dodict(Rest2, dict:store(Key, Val, Dict)).
-    
+    decdict(Rest2, dict:store(Key, Val, Dict)).
