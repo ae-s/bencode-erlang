@@ -7,8 +7,16 @@
 
 %% %% %% %% %% %% %% %% Decoding %% %% %% %% %% %% %% %%
 
-bencode(Val) when is_integer(Val) ->
-    "i" ++ integer_to_list(Val) ++ "e".
+bencode({int, Val}) ->
+    "i" ++ integer_to_list(Val) ++ "e";
+
+bencode({string, Val}) ->
+    integer_to_list(length(Val)) ++ ":" ++ Val;
+
+bencode({list, Val}) ->
+    Fun = fun(A) -> bencode(A) end,
+    "l" ++ lists:flatten(lists:map(Fun, Val)) ++ "e".
+
 
 %% %% %% %% %% %% %% %% Decoding %% %% %% %% %% %% %% %%
 

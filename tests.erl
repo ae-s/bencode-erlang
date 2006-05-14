@@ -8,11 +8,38 @@
 	 test_dec_string1/0, test_dec_string2/0, 
 	 test_dec_list1/0, test_dec_list2/0, test_dec_list3/0, test_dec_list4/0, test_dec_list5/0, 
 	 test_dec_dict1/0]).
--export([test_enc_int1/0]).
+-export([test_enc_int1/0, test_enc_int2/0, 
+	 test_enc_string1/0, test_enc_string2/0,
+	 test_enc_list1/0, test_enc_list2/0, test_enc_list3/0]).
 
 %% Integer decoding tests
 test_enc_int1() ->
-    ?match("i999e", bencode:bencode(999)).
+    ?match("i999e", bencode:bencode({int, 999})).
+test_enc_int2() ->
+    ?match("i-999e", bencode:bencode({int, -999})).
+
+%% String encoding tests
+test_enc_string1() ->
+    ?match("0:", bencode:bencode({string, ""})).
+test_enc_string2() ->
+    ?match("3:xyz", bencode:bencode({string, "xyz"})).
+
+%% List encoding tests
+test_enc_list1() ->
+    ?match("li1ei2ei3ee", bencode:bencode({list, [{int, 1},
+						  {int, 2},
+						  {int, 3}]})).
+test_enc_list2() ->
+    ?match("li1e3:xyzi3ee", bencode:bencode({list, [{int, 1},
+						  {string, "xyz"},
+						  {int, 3}]})).
+test_enc_list3() ->
+    ?match("l3:abcli1ei2ei3ee3:xyze", bencode:bencode({list, [{string, "abc"},
+						  {list, [{int, 1},
+							  {int, 2},
+							  {int, 3}]},
+						 {string, "xyz"}]})).
+
 
 %% Integer decoding tests
 test_dec_int1() ->
