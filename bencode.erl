@@ -22,8 +22,7 @@ bencode({string, Val}) ->
     integer_to_list(length(Val)) ++ ":" ++ Val;
 
 bencode({list, Val}) ->
-    Fun = fun(A) -> bencode(A) end,
-    "l" ++ lists:flatten(lists:map(Fun, Val)) ++ "e";
+    "l" ++ lists:flatten(lists:map(fun bencode/1, Val)) ++ "e";
 
 bencode({dict, Dict}) ->
     SFun = fun({Key1, _}, {Key2, _}) ->
