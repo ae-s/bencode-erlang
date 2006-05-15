@@ -5,7 +5,7 @@
 
 -import(string, [substr/2, substr/3, to_integer/1, chr/2]).
 
-%% %% %% %% %% %% %% %% Decoding %% %% %% %% %% %% %% %%
+%% %% %% %% %% %% %% %% Encoding %% %% %% %% %% %% %% %%
 
 keyenc(Key) when is_list(Key) ->
     bencode({string, Key});
