@@ -33,6 +33,11 @@ test_enc_list3() ->
 							  {int, 3}]},
 						 {string, "xyz"}]})).
 
+%% Dict encoding tests
+test_enc_dict() ->
+    Dict = dict:from_list([{"age", {int, 25}}, {"eyes", {string, "blue"}}]),
+    ?match("d3:agei25e4:eyes4:bluee", bencode:bencode({dict, Dict})).
+
 
 %% Integer decoding tests
 test_dec_int1() ->

@@ -7,6 +7,14 @@
 
 %% %% %% %% %% %% %% %% Decoding %% %% %% %% %% %% %% %%
 
+keyenc(Key) when is_list(Key) ->
+    bencode({string, Key});
+keyenc(Key) when is_atom(Key) ->
+    bencode({string, atom_to_list(Key)});
+keyenc({string, _} = Key) ->
+    bencode(Key).
+
+
 bencode({int, Val}) ->
     "i" ++ integer_to_list(Val) ++ "e";
 
@@ -15,7 +23,17 @@ bencode({string, Val}) ->
 
 bencode({list, Val}) ->
     Fun = fun(A) -> bencode(A) end,
-    "l" ++ lists:flatten(lists:map(Fun, Val)) ++ "e".
+    "l" ++ lists:flatten(lists:map(Fun, Val)) ++ "e";
+
+bencode({dict, Dict}) ->
+    SFun = fun({Key1, _}, {Key2, _}) ->
+		   Key1 < Key2
+	   end,
+    List = lists:sort(SFun, dict:to_list(Dict)),
+    MFun = fun({Key, Val}) ->
+		   keyenc(Key) ++ bencode(Val)
+	   end,
+    "d" ++ lists:flatten(lists:map(MFun, List)) ++ "e".
 
 
 %% %% %% %% %% %% %% %% Decoding %% %% %% %% %% %% %% %%
