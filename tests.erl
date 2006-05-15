@@ -34,8 +34,14 @@ test_enc_list3() ->
 						 {string, "xyz"}]})).
 
 %% Dict encoding tests
-test_enc_dict() ->
+test_enc_dict1() ->
     Dict = dict:from_list([{"age", {int, 25}}, {"eyes", {string, "blue"}}]),
+    ?match("d3:agei25e4:eyes4:bluee", bencode:bencode({dict, Dict})).
+test_enc_dict2() ->
+    Dict = dict:from_list([{age, {int, 25}}, {eyes, {string, "blue"}}]),
+    ?match("d3:agei25e4:eyes4:bluee", bencode:bencode({dict, Dict})).
+test_enc_dict3() ->
+    Dict = dict:from_list([{{string, "age"}, {int, 25}}, {{string, "eyes"}, {string, "blue"}}]),
     ?match("d3:agei25e4:eyes4:bluee", bencode:bencode({dict, Dict})).
 
 
