@@ -1,3 +1,12 @@
+%%
+%% Basic Bencode (Bittorrent) encoder.  The details of the encoding
+%% are available here: http://bittorrent.org/protocol.html
+%% Technically this probably isn't fully compliant as it's not UTF8,
+%% but probably won't matter in simple cases.
+%%
+%% Author: Steve Smith <tarka@internode.on.net>
+%% License: LGPL 2.1
+%% 
 
 -module(bencode).
 

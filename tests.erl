@@ -1,3 +1,9 @@
+%%
+%% Basic Eunit-based test suite for bencode.erl 
+%%
+%% Author: Steve Smith <tarka@internode.on.net>
+%% License: LGPL 2.1
+%% 
 
 -module(tests).
 
